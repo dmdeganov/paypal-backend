@@ -1,7 +1,6 @@
 import express from "express";
 import fetch from "node-fetch";
 import "dotenv/config";
-import path from "path";
 import { productPayload } from "./productPayload.js";
 import { planPayload } from "./planPayload.js";
 import cors from 'cors';
@@ -10,12 +9,11 @@ const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PORT = 8888 } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 const app = express();
 
-const planId = "P-9TD488024V5972032MWFLUHI";
+const planId = "P-9TD488024V5972032MWFLUHI"; // взято из ответа после создания плана: responses/plan.json
 app.use(cors());
 
-app.use(express.static("client/dist"));
-// parse post params sent in body in json format
 app.use(express.json());
+
 const handleResponse = async (response) => {
   try {
     const jsonResponse = await response.json();
@@ -79,17 +77,8 @@ app.get("/", (req, res) => {
   res.send({ success: true });
 });
 
-// return client token for hosted-fields component
-app.post("/api/client-token", async (req, res) => {
-  try {
-    const { jsonResponse, httpStatusCode } = await generateClientToken();
-    res.status(httpStatusCode).json(jsonResponse);
-  } catch (error) {
-    console.error("Failed to generate client token:", error);
-    res.status(500).send({ error: "Failed to generate client token." });
-  }
-});
 
+//только чтобы один раз создать продукт и план подписки
 app.post("/api/create-product", async (req, res) => {
   try {
     const accessToken = await generateAccessToken();
@@ -114,7 +103,6 @@ app.post("/api/create-product", async (req, res) => {
     res.send(err);
   }
 });
-
 app.post("/api/create-plan", async (req, res) => {
   try {
     const accessToken = await generateAccessToken();
@@ -140,7 +128,9 @@ app.post("/api/create-plan", async (req, res) => {
     res.send(err);
   }
 });
+//
 
+//  для фронта только этот запрос нужен
 app.post("/api/create-subscription", async (req, res) => {
   try {
     const { jsonResponse, httpStatusCode } = await createSubscription();
