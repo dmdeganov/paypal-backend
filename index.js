@@ -9,7 +9,7 @@ const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PORT = 8888 } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 const app = express();
 
-const planId = "P-9TD488024V5972032MWFLUHI"; // взято из ответа после создания плана: responses/plan.json
+const planId = "P-62T90999WU382154HMWTENHA"; // взято из ответа после создания плана: responses/plan.json
 app.use(cors());
 
 app.use(express.json());
@@ -131,7 +131,7 @@ app.post("/api/create-plan", async (req, res) => {
 //
 
 //  для фронта только этот запрос нужен
-app.post("/api/create-subscription", async (req, res) => {
+app.post("/api/buy-with-paypal", async (req, res) => {
   try {
     const { jsonResponse, httpStatusCode } = await createSubscription();
     res.status(httpStatusCode).json(jsonResponse);

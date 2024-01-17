@@ -1,5 +1,5 @@
 export const planPayload = {
-  product_id: "PROD-7TL326533E694871F",
+  product_id: "PROD-1T5972390R257015G", // берется из респонса запроса create product
   name: "Humans design subscription plan",
   status: "ACTIVE",
   billing_cycles: [
@@ -9,13 +9,13 @@ export const planPayload = {
       total_cycles: 1,
       pricing_scheme: {
         fixed_price: {
-          value: "0.99",
+          value: "1.99",
           currency_code: "USD",
         },
       },
       frequency: {
-        interval_unit: "WEEK",
-        interval_count: 1,
+        interval_unit: "DAY",
+        interval_count: 3,
       },
     },
     {
@@ -24,7 +24,7 @@ export const planPayload = {
       total_cycles: 0,
       pricing_scheme: {
         fixed_price: {
-          value: "39.99",
+          value: "29.99",
           currency_code: "USD",
         },
       },
