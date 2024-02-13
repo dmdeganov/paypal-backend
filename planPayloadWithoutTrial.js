@@ -1,26 +1,11 @@
-export const planPayload = {
+export const planPayloadWithoutTrial = {
   product_id: "PROD-1T5972390R257015G", // берется из респонса запроса create product
   name: "Humans design subscription plan",
   status: "ACTIVE",
   billing_cycles: [
     {
-      tenure_type: "TRIAL",
-      sequence: 1,
-      total_cycles: 1,
-      pricing_scheme: {
-        fixed_price: {
-          value: "4.99",
-          currency_code: "USD",
-        },
-      },
-      frequency: {
-        interval_unit: "WEEK",
-        interval_count: 1,
-      },
-    },
-    {
       tenure_type: "REGULAR",
-      sequence: 2,
+      sequence: 1,
       total_cycles: 0,
       pricing_scheme: {
         fixed_price: {

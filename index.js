@@ -3,7 +3,8 @@ import fetch from "node-fetch";
 import "dotenv/config";
 import { productPayload } from "./productPayload.js";
 import { planPayload } from "./planPayload.js";
-import cors from 'cors';
+import cors from "cors";
+import { planPayloadWithoutTrial } from "./planPayloadWithoutTrial.js";
 
 const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PORT = 8888 } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
@@ -77,7 +78,6 @@ app.get("/", (req, res) => {
   res.send({ success: true });
 });
 
-
 //только чтобы один раз создать продукт и план подписки
 app.post("/api/create-product", async (req, res) => {
   try {
@@ -117,16 +117,35 @@ app.post("/api/create-plan", async (req, res) => {
           Accept: "application/json",
           Prefer: "return=representation",
         },
-        body: JSON.stringify(planPayload),
+        body: JSON.stringify(planPayloadWithoutTrial),
       },
     );
 
     const plan = await response.json();
-    console.log(plan);
     res.send(plan);
   } catch (err) {
     res.send(err);
   }
+});
+
+app.get("/api/subscription/:id", async (req, res) => {
+  const subscriptionId = req.params.id;
+
+  const accessToken = await generateAccessToken();
+
+  const response = await fetch(
+    `https://api-m.sandbox.paypal.com/v1/billing/subscriptions/${subscriptionId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    },
+  );
+
+  const data = await response.json();
+  res.send(data);
 });
 //
 
